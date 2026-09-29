@@ -1,18 +1,18 @@
 {
   "categoria": "MERCADOS",
-  "titular": "",
-  "fecha": "",
-  "activo": "",
-  "valor": null,
+  "titular": "PRUEBA DE VIDEO REMOTION",
+  "fecha": "29 septiembre 2026",
+  "activo": "S&P 500",
+  "valor": 100,
   "decimales": 2,
   "prefijo": "",
   "sufijo": "",
-  "variacion": null,
+  "variacion": 0,
   "colorVariacion": "auto",
-  "puntosGrafico": [],
-  "periodoGrafico": "",
-  "resumen": "",
-  "fuente": "",
+  "puntosGrafico": [98, 99, 100, 101, 100],
+  "periodoGrafico": "Sesión",
+  "resumen": "Prueba técnica del sistema de vídeo de Napoleon Finanzas.",
+  "fuente": "Napoleon Finanzas",
   "cta": "Síguenos para más noticias financieras",
-  "verificado": false
+  "verificado": true
 }
