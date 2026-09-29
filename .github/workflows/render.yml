@@ -49,7 +49,7 @@ jobs:
         run: |
           SEGURO=$(printf '%s' "$NOMBRE" | tr -c 'A-Za-z0-9._-' '_')
           echo "SEGURO=$SEGURO" >> "$GITHUB_ENV"
-          npx remotion render NoticiaFinanciera "out/${SEGURO}.mp4" --props="$ARCHIVO"
+          npx remotion render src/index.ts NoticiaFinanciera "out/${SEGURO}.mp4" --props="$ARCHIVO"
 
       - name: Guardar el MP4 para descargarlo
         uses: actions/upload-artifact@v4
