@@ -1,0 +1,60 @@
+# Renderiza la plantilla NoticiaFinanciera en la nube (GitHub Actions).
+# Se lanza a mano desde GitHub: pestaña Actions → "Render noticia" → Run workflow.
+name: Render noticia
+
+on:
+  workflow_dispatch:
+    inputs:
+      archivo:
+        description: "Archivo JSON con los datos de la noticia"
+        required: true
+        default: "src/noticia-actual.json"
+      nombre:
+        description: "Nombre del MP4 (sin .mp4)"
+        required: true
+        default: "noticia"
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ARCHIVO: ${{ inputs.archivo }}
+      NOMBRE: ${{ inputs.nombre }}
+    steps:
+      - name: Descargar el proyecto
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias del proyecto
+        run: npm ci || npm install
+
+      - name: Descargar el navegador de Remotion
+        run: npx remotion browser ensure
+
+      - name: Comprobar que el archivo de datos existe
+        run: |
+          if [ ! -f "$ARCHIVO" ]; then
+            echo "::error::No existe el archivo '$ARCHIVO' en el repositorio."
+            exit 1
+          fi
+          echo "Datos usados:"; cat "$ARCHIVO"
+
+      - name: Renderizar el video
+        run: |
+          SEGURO=$(printf '%s' "$NOMBRE" | tr -c 'A-Za-z0-9._-' '_')
+          echo "SEGURO=$SEGURO" >> "$GITHUB_ENV"
+          npx remotion render NoticiaFinanciera "out/${SEGURO}.mp4" --props="$ARCHIVO"
+
+      - name: Guardar el MP4 para descargarlo
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.SEGURO }}
+          path: out/*.mp4
+          retention-days: 7
+          if-no-files-found: error
